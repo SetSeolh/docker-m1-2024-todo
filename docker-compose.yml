@@ -1,0 +1,22 @@
+services:
+  db:
+    image: mongo
+    restart: unless-stopped
+    expose:
+      - 27017
+    networks:
+      - backdb
+
+  back:
+    image: node
+    restart: unless-stopped
+    volumes:
+      - ./back:/usr/src
+    command: "node /usr/src/server.mjs"
+    ports:
+      - 3000:3000
+    networks:
+      - backdb
+
+networks:
+  backdb:

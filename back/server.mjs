@@ -4,7 +4,7 @@ import {MongoClient} from 'mongodb';
 
 const mongoURI = "mongodb://db:27017/docker";
 const client = new MongoClient(mongoURI);
-console.log("CONNECTED", !!client && !!client.topology && client.topology.isConnected());
+const mongoEstConnecte = !!client && !!client.topology && client.topology.isConnected();
 const db = client.db('docker');
 const todos = db.collection('todos');
 
@@ -19,7 +19,14 @@ app.use((req, res, next)=>{
     res.setHeader("Access-Control-Allow-Methods", "*");
     console.log("REQ", req.url);
     next();
-})
+});
+
+app.get("/test", (req, res)=>{
+    res.send(`
+       Serveur Node : OK<br>
+       Connexion Mongo : ${mongoEstConnecte ? "OK" : "KO"} 
+    `);
+});
 
 app.delete('/:id', async (req, res)=>{
     console.log("app.delete('/:id'");
